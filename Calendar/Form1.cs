@@ -88,6 +88,7 @@ namespace Calendar
         } 
         private void buttonAddTask_Click(object sender, EventArgs e)
         {
+            //todo add task to task list - separate method
             day_container.Controls.Clear();
             DisplayDays();
             textBox1.Text = "";
