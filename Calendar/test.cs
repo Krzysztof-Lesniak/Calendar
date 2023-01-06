@@ -8,5 +8,8 @@ namespace Calendar
 {
     internal class test
     {
+        public void dupa()
+        {
+        }
     }
 }

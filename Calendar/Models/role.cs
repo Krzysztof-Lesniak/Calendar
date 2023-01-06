@@ -1,12 +1,9 @@
 ﻿namespace Calendar
 {
-    internal static partial class Program
+    public enum role
     {
-        public enum role
-        {
-            specialist = 0,
-            hirer = 1,
+        specialist = 0,
+        hirer = 1,
 
-        }
     }
 }

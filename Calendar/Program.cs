@@ -16,7 +16,6 @@ namespace Calendar
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
-            var mark = new Hirer("Mark", role.hirer);
             
         }
     }

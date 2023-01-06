@@ -1,3 +1,5 @@
+using Calendar.Database;
+using Calendar.Models;
 using System.Globalization;
 
 namespace Calendar
@@ -7,6 +9,7 @@ namespace Calendar
         
         int month, year;
         int daysInMonth;
+
         List<UserControlDays> daysList = new List<UserControlDays>();
         UserControlUI uI = new UserControlUI();
         public Form1()
@@ -53,6 +56,7 @@ namespace Calendar
             }
             SetYearMonth();
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             day_container.Controls.Clear();
@@ -88,7 +92,9 @@ namespace Calendar
         } 
         private void buttonAddTask_Click(object sender, EventArgs e)
         {
+            var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Now); // to do typie
             //todo add task to task list - separate method
+            CalendarDb.CalendarTasks.Add(newCalendarTask);
             day_container.Controls.Clear();
             DisplayDays();
             textBox1.Text = "";
