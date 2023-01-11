@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Calendar.Database;
+using Calendar.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,13 +32,20 @@ namespace Calendar
 
         public void days(int numday)
         {
+            
             lbDays.Text = numday.ToString();
             
         }
-
+        
         public void AddTask(string text)
         {
             checkedListBox1.Items.Add(text);
+        }
+
+        public void AddTaskFromMemory(DateTime dateOfTask)
+        {
+            var calendarTask = CalendarDb.CalendarTasks.Find(x=>x.Date == dateOfTask);
+            checkedListBox1.Items.Add(calendarTask.Title);
         }
 
 
