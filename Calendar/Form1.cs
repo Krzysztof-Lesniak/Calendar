@@ -49,18 +49,21 @@ namespace Calendar
             {
                 UserControlDays ucdays = new UserControlDays();
                 ucdays.days(i);
-                daysList.Add(ucdays);
-
-                if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i)
+                
+                if (CalendarDb.CalendarTasks.Any(x => x.Date == new DateTime(year,month,i)))
+                {
+                    ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i));
+                }
+                else if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i)
                 {
                     ucdays.AddTask(textBox1.Text);
                 }
-                if(GetTheExistingTaskDate(i) != DateTime.MinValue && GetTheExistingTaskDate(i) == new DateTime(year,month,i))
-                {
-                    DisplayTasks(ucdays, i);
-                }
+
+
                 day_container.Controls.Add((ucdays));
                 
+                daysList.Add(ucdays);
+
             }
             SetYearMonth();
         }
@@ -100,13 +103,13 @@ namespace Calendar
         } 
         private void buttonAddTask_Click(object sender, EventArgs e)
         {
-            if (uI.comboBoxDays.SelectedItem == null || textBox1.Text == "")
+            if (uI.comboBoxDays.SelectedItem == null || String.IsNullOrWhiteSpace(textBox1.Text))
             {
-                MessageBox.Show("you have to choose a date, and procite the task name", "B³¹d", MessageBoxButtons.OK);
+                MessageBox.Show("you have to choose a date, and provide the task name", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-            var dateString = Convert.ToString(month) + '/' + Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(year);
+            var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
             var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Parse(dateString)); // to do typie
             //todo add task to task list - separate method
             CalendarDb.CalendarTasks.Add(newCalendarTask);
@@ -117,22 +120,10 @@ namespace Calendar
             }
             
         }
-        private void DisplayTasks(UserControlDays ucdays, int dayNumber)
-        {
-            var result = GetTheExistingTaskDate(dayNumber);
-            if (result != DateTime.MinValue && result == new DateTime(year, month, dayNumber))
-            {
-                ucdays.AddTaskFromMemory(result);
-            }
-        }
+        
         private DateTime GetTheExistingTaskDate (int dayNumber)
         {
-            var TemporaryTask = new CalendarTask(0, "thats a default Task", DateTime.MinValue);
-            var FoundTask = CalendarDb.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber));
-            
-            if (FoundTask != null)
-                TemporaryTask = FoundTask;
-            return TemporaryTask.Date;
+            return CalendarDb.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
         }
         private void label1_Click(object sender, EventArgs e)
         {

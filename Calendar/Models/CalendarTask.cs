@@ -1,4 +1,6 @@
-﻿namespace Calendar.Models
+﻿using Calendar.Database;
+
+namespace Calendar.Models
 {
     public class CalendarTask
     {
@@ -10,6 +12,7 @@
             Id = id;
             Title = title;
             Date = date;
+            
         }
         
     }
