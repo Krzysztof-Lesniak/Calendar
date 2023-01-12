@@ -2,6 +2,7 @@
 
 namespace Calendar.Models
 {
+    [Serializable]
     public class CalendarTask
     {
         public int Id { get; set; }

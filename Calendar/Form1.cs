@@ -59,10 +59,8 @@ namespace Calendar
                     ucdays.AddTask(textBox1.Text);
                 }
 
-
                 day_container.Controls.Add((ucdays));
-                
-                daysList.Add(ucdays);
+                daysList.Add(ucdays); // to jeszcze nie wiadomo po co w ogóle istnieje
 
             }
             SetYearMonth();
