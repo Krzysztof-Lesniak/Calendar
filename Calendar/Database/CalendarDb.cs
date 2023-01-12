@@ -21,8 +21,9 @@ namespace Calendar.Database
         public static void save()
         {
             string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + numberOfCalendar.ToString() + ".bin")
+            string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + numberOfCalendar.ToString() + ".bin");
             
+
             numberOfCalendar++;
         }
     }
