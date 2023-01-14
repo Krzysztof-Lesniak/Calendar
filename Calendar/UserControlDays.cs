@@ -49,7 +49,6 @@ namespace Calendar
         }
         private void checkedListBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            checkedListBox1.Tag = 1; checkedListBox1.SelectedIndex = 0;
         }
     }
 }

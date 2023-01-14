@@ -33,6 +33,7 @@ namespace Calendar
             {
                 uI.comboBoxDays.Items.Add(i);
             }
+
         }
         void DisplayDays()
         {
@@ -54,7 +55,8 @@ namespace Calendar
                 {
                     ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i));
                 }
-                else if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i)
+                else if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i 
+                    && !String.IsNullOrWhiteSpace(textBox1.Text))
                 {
                     ucdays.AddTask(textBox1.Text);
                 }
@@ -63,6 +65,7 @@ namespace Calendar
                 daysList.Add(ucdays); // to jeszcze nie wiadomo po co w ogóle istnieje
 
             }
+            
             SetYearMonth();
         }
 
@@ -111,10 +114,10 @@ namespace Calendar
             var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Parse(dateString)); // to do typie
             //todo add task to task list - separate method
             CalendarDb.CalendarTasks.Add(newCalendarTask);
-
             day_container.Controls.Clear();
             DisplayDays();
             textBox1.Text = "";
+
             }
             
         }
@@ -146,6 +149,45 @@ namespace Calendar
        
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            day_container.Controls.Clear();
+            UI_container.Controls.Clear();
+            CalendarDb.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+            DisplayDays();
+            DisplayUI();
+        }
+
+        private void CreateButton_Click(object sender, EventArgs e)
+        {
+            day_container.Controls.Clear();
+            UI_container.Controls.Clear();
+            CalendarDb.CalendarTasks.Clear();
+            daysList.Clear();
+            DisplayDays();
+            DisplayUI();
+        }
+
+        private void save_button_Click(object sender, EventArgs e)
+        {
+            Calendar_ComboBox.Items.Clear();
+            CalendarDb.save();
+            for (int i = 0; i < CalendarDb.calLp; i++)
+            {
+                Calendar_ComboBox.Items.Add(i + 1);
+            }
+        }
+
+        private void label8_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

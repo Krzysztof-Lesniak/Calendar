@@ -44,6 +44,12 @@
             this.UI_container = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonAddTask = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.save_button = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.CreateButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.Calendar_ComboBox = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,12 +155,12 @@
             this.label7.Text = "Saturday";
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
-            // label8
+            // DateLabel
             // 
             this.DateLabel.AutoSize = true;
             this.DateLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.DateLabel.Location = new System.Drawing.Point(341, 24);
-            this.DateLabel.Name = "label8";
+            this.DateLabel.Name = "DateLabel";
             this.DateLabel.Size = new System.Drawing.Size(139, 28);
             this.DateLabel.TabIndex = 9;
             this.DateLabel.Text = "MONTH YEAR";
@@ -189,12 +195,76 @@
             this.textBox1.TabIndex = 12;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
+            // save_button
+            // 
+            this.save_button.Location = new System.Drawing.Point(934, 310);
+            this.save_button.Name = "save_button";
+            this.save_button.Size = new System.Drawing.Size(111, 56);
+            this.save_button.TabIndex = 13;
+            this.save_button.Text = "Save this calendar";
+            this.save_button.UseVisualStyleBackColor = true;
+            this.save_button.Click += new System.EventHandler(this.save_button_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(823, 454);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(99, 56);
+            this.loadButton.TabIndex = 14;
+            this.loadButton.Text = "Load calendar";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // CreateButton
+            // 
+            this.CreateButton.Location = new System.Drawing.Point(811, 310);
+            this.CreateButton.Name = "CreateButton";
+            this.CreateButton.Size = new System.Drawing.Size(111, 56);
+            this.CreateButton.TabIndex = 16;
+            this.CreateButton.Text = "Create new calendar";
+            this.CreateButton.UseVisualStyleBackColor = true;
+            this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Location = new System.Drawing.Point(823, 516);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(99, 56);
+            this.deleteButton.TabIndex = 15;
+            this.deleteButton.Text = "Delete calendar";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            // 
+            // Calendar_ComboBox
+            // 
+            this.Calendar_ComboBox.FormattingEnabled = true;
+            this.Calendar_ComboBox.Location = new System.Drawing.Point(811, 420);
+            this.Calendar_ComboBox.Name = "Calendar_ComboBox";
+            this.Calendar_ComboBox.Size = new System.Drawing.Size(117, 28);
+            this.Calendar_ComboBox.TabIndex = 17;
+            this.Calendar_ComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(811, 393);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(117, 20);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "choose calendar";
+            this.label8.Click += new System.EventHandler(this.label8_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1159, 647);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.Calendar_ComboBox);
+            this.Controls.Add(this.CreateButton);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.save_button);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.buttonAddTask);
             this.Controls.Add(this.UI_container);
@@ -235,5 +305,11 @@
         private FlowLayoutPanel UI_container;
         private Button buttonAddTask;
         private TextBox textBox1;
+        private Button save_button;
+        private Button loadButton;
+        private Button CreateButton;
+        private Button deleteButton;
+        private ComboBox Calendar_ComboBox;
+        private Label label8;
     }
 }
