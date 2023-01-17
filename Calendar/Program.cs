@@ -1,5 +1,6 @@
 using Calendar.Database;
 using Calendar.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Calendar
 {
@@ -19,9 +20,6 @@ namespace Calendar
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form2());
-            CalendarDb database1= new CalendarDb();
-            
-            
         }
     }
 }

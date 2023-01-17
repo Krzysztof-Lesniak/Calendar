@@ -32,7 +32,7 @@ namespace Calendar.Database
         }
         public static void save() //ivoked when calendar is new
         {
-            var calNr = CalendarObjects.Max(x => x.Id) + 1; 
+            var calNr =CalendarObjects.Any() ? CalendarObjects.Max(x => x.Id) + 1 : 0;
             taskNr = 0;
             CalendarObj CalendarObject = new CalendarObj(calNr);
             CalendarObject.TaskList = CalendarTasks;
@@ -46,6 +46,7 @@ namespace Calendar.Database
         {
             CalendarTasks.Clear();
             taskNr = 0;
+            LoadEverything();
             var loadedCalendar = CalendarObjects.Find(x => x.Id == calendarNumber);
             foreach (var task in loadedCalendar.TaskList)
             {
