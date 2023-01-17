@@ -7,32 +7,42 @@ namespace Calendar
 {
     public partial class Form1 : Form
     {
-        
+        private User _logedInUser;
         int month, year;
         int daysInMonth;
 
         List<UserControlDays> daysList = new List<UserControlDays>();
         UserControlUI uI = new UserControlUI();
-        public Form1()
+        public Form1(User logedInUser)
         {
             InitializeComponent();
+            _logedInUser= logedInUser;
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
             month = now.Month;
             year = now.Year;
+            if(_logedInUser._role == role.specialist)
+            {
+                textBox1.Hide();
+                buttonAddTask.Hide();
+            }
             DisplayDays();
             DisplayUI();
         }
         void DisplayUI()
         {
-            uI.comboBoxDays.Items.Clear();
-            UI_container.Controls.Add(uI);
-            for (int i = 1; i <= daysInMonth; i++)
+            if(_logedInUser._role == role.hirer)
             {
-                uI.comboBoxDays.Items.Add(i);
+                uI.comboBoxDays.Items.Clear();
+                UI_container.Controls.Add(uI);
+                for (int i = 1; i <= daysInMonth; i++)
+                {
+                    uI.comboBoxDays.Items.Add(i);
+                }
             }
+            
 
         }
         void DisplayDays()

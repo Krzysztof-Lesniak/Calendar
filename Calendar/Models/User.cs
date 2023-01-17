@@ -2,13 +2,16 @@
 {
     public class User
     {
-        public string _name { get; set; }
-        private role _role;
+        public string _userName { get; set; }
+        public string _password { get; set; }
+        public role _role { get; set; }
 
-        public User(string name, role role)
+        public User(string name,string password, role role)
         {
-            this._role = role;
-            _name = name;
+            _role = role;
+            _userName = name;
+            _password = password;
+
         }
 
         public void ReportProblem()

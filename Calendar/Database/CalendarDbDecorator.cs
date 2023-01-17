@@ -13,7 +13,7 @@ namespace Calendar.Database
 {
     internal static class CalendarDbDecorator
     {
-        public static List<User> Users { get { return _calendarDb.Users; } }
+        public static List<User> Users => _calendarDb.Users;
         public static List<CalendarTask> CalendarTasks => _calendarDb.CalendarTasks;
         public static int calNr { get; set; }
 

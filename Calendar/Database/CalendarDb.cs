@@ -18,6 +18,11 @@ namespace Calendar.Database
 
         }
 
+        public void SaveEverything()
+        {
+            
+        }
+
        
     }
 }
