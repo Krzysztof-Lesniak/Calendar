@@ -23,7 +23,7 @@ namespace Calendar
             DateTime now = DateTime.Now;
             month = now.Month;
             year = now.Year;
-            if(_logedInUser._role == role.specialist)
+            if(_logedInUser.Role == role.specialist)
             {
                 textBox1.Hide();
                 buttonAddTask.Hide();
@@ -33,7 +33,7 @@ namespace Calendar
         }
         void DisplayUI()
         {
-            if(_logedInUser._role == role.hirer)
+            if(_logedInUser.Role == role.hirer)
             {
                 uI.comboBoxDays.Items.Clear();
                 UI_container.Controls.Add(uI);

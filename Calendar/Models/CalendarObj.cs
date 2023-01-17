@@ -9,7 +9,7 @@ namespace Calendar.Models
     public class CalendarObj
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public List<CalendarTask> TaskList { get; set; } 
         public CalendarObj()
         {

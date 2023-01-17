@@ -13,17 +13,32 @@ namespace Calendar.Database
 {
     internal static class CalendarDbDecorator
     {
-        public static List<User> Users => _calendarDb.Users;
-        public static List<CalendarTask> CalendarTasks => _calendarDb.CalendarTasks;
-        public static List<CalendarObj> CalendarObjects => _calendarDb.CalendarObjects;
+        public static List<User> Users => _calendarDb.Users;//todo private + metody do obsługi
+        public static List<CalendarTask> CalendarTasks => _calendarDb.CalendarTasks;//todo private + metody do obsługi 
+        public static List<CalendarObj> CalendarObjects => _dbContext.CalendarObjects.ToList();//todo private + metody do obsługi GetAllCalendarObjects i AddCalendarObject
+
         public static int taskNr { get; set; } = 0;
 
-        private static CalendarDb _calendarDb = new CalendarDb();
+        private static CalendarDb _calendarDb = new CalendarDb();//todo delete po przepisaniu wszystkich odwołań na dbcontext
+        private static CalendarDbContext _dbContext;
+
+        static CalendarDbDecorator()
+        {
+            _dbContext = new CalendarDbContext();
+        }
+
+        public static CalendarObj FindCalendarObj(Guid id)
+        {
+            return CalendarObjects.Find(x => x.Id == id);
+        }
+
         
         public static void save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
 
-            CalendarObjects.Add(calendarToSave);
+            _dbContext.CalendarObjects.Add(calendarToSave);
+            _dbContext.SaveChanges();
+            
             // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
             SaveEverything();  
             
@@ -31,10 +46,8 @@ namespace Calendar.Database
 
         public static CalendarObj Load(Guid calendarId)
         {
-            CalendarTasks.Clear();
-            CalendarObjects.Clear();
             LoadEverything();
-            var loadedCalendar = CalendarObjects.Find(x => x.Id == calendarId);
+            var loadedCalendar = FindCalendarObj(calendarId);
             return loadedCalendar;
 
 

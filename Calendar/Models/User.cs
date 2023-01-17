@@ -1,17 +1,24 @@
-﻿namespace Calendar
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Calendar
 {
     public class User
     {
-        public string _userName { get; set; }
-        public string _password { get; set; }
-        public role _role { get; set; }
+        [Key]
+        public string UserName { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public role Role { get; set; }
 
         public User(string name,string password, role role)
         {
-            _role = role;
-            _userName = name;
-            _password = password;
-
+            Role = role;
+            UserName = name;
+            Password = password;
+        }
+        public User()
+        {
         }
 
         public void ReportProblem()

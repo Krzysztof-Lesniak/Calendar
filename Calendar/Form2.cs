@@ -46,11 +46,11 @@ namespace Calendar
 
         private void LogIn_button_Click(object sender, EventArgs e)
         {
-            if (CalendarDbDecorator.Users.Any(x => x._userName == username_textBox.Text))
+            if (CalendarDbDecorator.Users.Any(x => x.UserName == username_textBox.Text))
             {
                 var user = CalendarDbDecorator.Users.
-                    Find(x => x._userName == username_textBox.Text);
-                if (user._password == password_textBox.Text)
+                    Find(x => x.UserName == username_textBox.Text);
+                if (user.Password == password_textBox.Text)
                 {
                     new CalendarForm(user).Show();
                     this.Hide();
