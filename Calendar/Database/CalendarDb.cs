@@ -11,7 +11,9 @@ namespace Calendar.Database
     {
         public List<User> Users { get; set; } = new List<User>();
         public List<CalendarTask> CalendarTasks { get; set; } = new List<CalendarTask>();
-        public List<CalendarObj> Calendars { get; set; } = new List<CalendarObj> ();
+        //public List<CalendarObj> Calendars { get; set; } = new List<CalendarObj> ();
+        public List<int> CalendarIds { get; set; } = new List<int>();
+        public List<CalendarObj> CalendarObjects { get; set; } = new List<CalendarObj>();
 
         public CalendarDb()
         {

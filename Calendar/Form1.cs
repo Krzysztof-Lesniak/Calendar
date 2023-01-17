@@ -10,6 +10,7 @@ namespace Calendar
         private User _logedInUser;
         int month, year;
         int daysInMonth;
+        bool isLoaded = false;
 
         List<UserControlDays> daysList = new List<UserControlDays>();
         UserControlUI uI = new UserControlUI();
@@ -114,54 +115,33 @@ namespace Calendar
         } 
         private void buttonAddTask_Click(object sender, EventArgs e)
         {
+            
             if (uI.comboBoxDays.SelectedItem == null || String.IsNullOrWhiteSpace(textBox1.Text))
             {
                 MessageBox.Show("you have to choose a date, and provide the task name", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-            var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
-            var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Parse(dateString),0); // to do typie
-            //todo add task to task list - separate method
-            CalendarDbDecorator.CalendarTasks.Add(newCalendarTask);
-            day_container.Controls.Clear();
-            DisplayDays();
-            textBox1.Text = "";
-
+                AddTask();
+                day_container.Controls.Clear();
+                DisplayDays();
             }
             
         }
-        
+        private void AddTask()
+        {
+            var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
+            var newCalendarTask = new CalendarTask(CalendarDbDecorator.taskNr, textBox1.Text, DateTime.Parse(dateString), 0); // to do typie
+            CalendarDbDecorator.CalendarTasks.Add(newCalendarTask);
+            CalendarDbDecorator.taskNr++;
+            textBox1.Text = "";
+        }
+
         private DateTime GetTheExistingTaskDate (int dayNumber)
         {
             return CalendarDbDecorator.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
         }
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-       
-
-        private void textBox1_TextChanged_1(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void loadButton_Click(object sender, EventArgs e)
         {
@@ -177,12 +157,15 @@ namespace Calendar
                 DisplayDays();
                 DisplayUI();
             }
+            isLoaded= true;
         }
 
         private void save_button_Click(object sender, EventArgs e)
         {
             Calendar_ComboBox.Items.Clear();
-            CalendarDbDecorator.save();
+            if (isLoaded) CalendarDbDecorator.save(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+            else CalendarDbDecorator.save();
+
             foreach (var id in CalendarDbDecorator.CalendarIds)
             {
                 Calendar_ComboBox.Items.Add(id);
@@ -194,6 +177,7 @@ namespace Calendar
             daysList.Clear();
             DisplayDays();
             DisplayUI();
+            isLoaded= false;
         }
         private void deleteButton_Click(object sender, EventArgs e)
         {
@@ -226,6 +210,8 @@ namespace Calendar
 
         private void logOut_button_Click(object sender, EventArgs e)
         {
+            
+            
             new Form2().Show();
             this.Close();
         }
@@ -234,7 +220,32 @@ namespace Calendar
         {
 
         }
+        private void label1_Click(object sender, EventArgs e)
+        {
 
+        }
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+       
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
 
     }
 }
