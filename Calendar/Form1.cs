@@ -160,7 +160,7 @@ namespace Calendar
             
             CalendarDbDecorator.save(currentCalendar);
 
-            foreach (var calendars in CalendarDbDecorator.CalendarObjects)
+            foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
             {
                 Calendar_ComboBox.Items.Add(calendars.Id);
             }

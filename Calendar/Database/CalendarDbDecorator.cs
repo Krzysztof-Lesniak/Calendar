@@ -29,7 +29,7 @@ namespace Calendar.Database
 
         public static CalendarObj FindCalendarObj(Guid id)
         {
-            return CalendarObjects.Find(x => x.Id == id);
+            return _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == id);
         }
 
         
