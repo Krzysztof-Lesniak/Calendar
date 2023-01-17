@@ -12,7 +12,6 @@ namespace Calendar
         int daysInMonth;
         bool isLoaded = false;
 
-        List<UserControlDays> daysList = new List<UserControlDays>();
         UserControlUI uI = new UserControlUI();
         public Form1(User logedInUser)
         {
@@ -73,7 +72,6 @@ namespace Calendar
                 }
 
                 day_container.Controls.Add((ucdays));
-                daysList.Add(ucdays); // to jeszcze nie wiadomo po co w ogóle istnieje
 
             }
             
@@ -91,7 +89,6 @@ namespace Calendar
                 month = 1;
                 year++;
             }
-            daysList.Clear();
             DisplayDays();
             DisplayUI();
         }
@@ -105,7 +102,6 @@ namespace Calendar
                 month = 12;
                 year--;
             }
-            daysList.Clear();
             DisplayDays();
             DisplayUI();
         }
@@ -174,7 +170,6 @@ namespace Calendar
             day_container.Controls.Clear();
             UI_container.Controls.Clear();
             CalendarDbDecorator.CalendarTasks.Clear();
-            daysList.Clear();
             DisplayDays();
             DisplayUI();
             isLoaded= false;
@@ -193,10 +188,14 @@ namespace Calendar
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 CalendarDbDecorator.CalendarTasks.Clear();
-                daysList.Clear();
                 DisplayDays();
                 DisplayUI();
             }
+        }
+        private void CloseAndSave_button_Click(object sender, EventArgs e)
+        {
+            CalendarDbDecorator.SaveEverything();
+            Application.Exit();
         }
         private void label8_Click_1(object sender, EventArgs e)
         {
@@ -240,7 +239,8 @@ namespace Calendar
         {
 
         }
-       
+
+        
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {

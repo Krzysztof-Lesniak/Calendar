@@ -1,4 +1,5 @@
 using Calendar.Database;
+using Calendar.Models;
 
 namespace Calendar
 {
@@ -19,6 +20,7 @@ namespace Calendar
             ApplicationConfiguration.Initialize();
             Application.Run(new Form2());
             CalendarDb database1= new CalendarDb();
+            
             
         }
     }

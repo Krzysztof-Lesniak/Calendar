@@ -1,4 +1,5 @@
 ﻿using Calendar.Database;
+using Calendar.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,9 +17,10 @@ namespace Calendar
         public Form2()
         {
             InitializeComponent();
+
         }
 
-        
+
 
         private void exit_button_Click(object sender, EventArgs e)
         {
@@ -33,7 +35,13 @@ namespace Calendar
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            if (File.Exists(@"C:\Users\Krzysztof\source\repos\Calendar\calendar_db_.json"))
+            {
+                CalendarDbDecorator.LoadEverything();
+            }
+            
+            CalendarDbDecorator.Users.Add(new User("a", "a", role.hirer));
+            
         }
 
         private void LogIn_button_Click(object sender, EventArgs e)

@@ -41,26 +41,24 @@ namespace Calendar.Database
             CalendarObj CalendarObject = new CalendarObj(calNr);
             CalendarObject.TaskList = CalendarTasks;
             CalendarObject.Id = calNr;
-            CalendarObjects.Add(CalendarObject);
+            // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
             CalendarIds.Add(calNr);
             
-            //string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            //string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + calNr.ToString() + ".json");
-            //var z = JsonConvert.SerializeObject(_calendarDb);
-            //File.WriteAllText(fullPathOfFile, z);
+            
             
         }
-        
+
         public static void Load(int calendarNumber)
         {
             CalendarTasks.Clear();
             taskNr = 0;
-            CalendarTasks.AddRange(CalendarObjects.Find(x => x.Id == calendarNumber).TaskList);
+            var loadedCalendar = CalendarObjects.Find(x => x.Id == calendarNumber);
+            foreach (var task in loadedCalendar.TaskList)
+            {
+                CalendarTasks.Add(task);
+            }
 
-            //string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            //string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + calendarNumber.ToString() + ".json");
-            //var tempStringLoad = File.ReadAllText(fullPathOfFile);
-            //_calendarDb = JsonConvert.DeserializeObject<CalendarDb>(tempStringLoad);
+
         }
         public static void Delete(int calendarNumber)
         {
@@ -69,5 +67,21 @@ namespace Calendar.Database
             string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + calendarNumber.ToString() + ".json");
             File.Delete(fullPathOfFile);
         }
+        public static void SaveEverything()
+        {
+            string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
+            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
+            var z = JsonConvert.SerializeObject(_calendarDb);
+            File.WriteAllText(fullPathOfFile, z);
+        }
+
+        public static void LoadEverything()
+        {
+            string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
+            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
+            var tempStringLoad = File.ReadAllText(fullPathOfFile);
+            _calendarDb = JsonConvert.DeserializeObject<CalendarDb>(tempStringLoad);
+        }
+    
     }
 }
