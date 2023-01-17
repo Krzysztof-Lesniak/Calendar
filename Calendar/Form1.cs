@@ -51,7 +51,7 @@ namespace Calendar
                 UserControlDays ucdays = new UserControlDays();
                 ucdays.days(i);
                 
-                if (CalendarDb.CalendarTasks.Any(x => x.Date == new DateTime(year,month,i)))
+                if (CalendarDbDecorator.CalendarTasks.Any(x => x.Date == new DateTime(year,month,i)))
                 {
                     ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i));
                 }
@@ -111,9 +111,9 @@ namespace Calendar
             else
             {
             var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
-            var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Parse(dateString)); // to do typie
+            var newCalendarTask = new CalendarTask(0, textBox1.Text, DateTime.Parse(dateString),0); // to do typie
             //todo add task to task list - separate method
-            CalendarDb.CalendarTasks.Add(newCalendarTask);
+            CalendarDbDecorator.CalendarTasks.Add(newCalendarTask);
             day_container.Controls.Clear();
             DisplayDays();
             textBox1.Text = "";
@@ -124,7 +124,7 @@ namespace Calendar
         
         private DateTime GetTheExistingTaskDate (int dayNumber)
         {
-            return CalendarDb.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
+            return CalendarDbDecorator.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
         }
         private void label1_Click(object sender, EventArgs e)
         {
@@ -155,33 +155,55 @@ namespace Calendar
 
         private void loadButton_Click(object sender, EventArgs e)
         {
-            day_container.Controls.Clear();
-            UI_container.Controls.Clear();
-            CalendarDb.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
-            DisplayDays();
-            DisplayUI();
-        }
-
-        private void CreateButton_Click(object sender, EventArgs e)
-        {
-            day_container.Controls.Clear();
-            UI_container.Controls.Clear();
-            CalendarDb.CalendarTasks.Clear();
-            daysList.Clear();
-            DisplayDays();
-            DisplayUI();
+            if (Calendar_ComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("you have to choose a calendar you want to load", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                day_container.Controls.Clear();
+                UI_container.Controls.Clear();
+                CalendarDbDecorator.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+                DisplayDays();
+                DisplayUI();
+            }
         }
 
         private void save_button_Click(object sender, EventArgs e)
         {
             Calendar_ComboBox.Items.Clear();
-            CalendarDb.save();
-            for (int i = 0; i < CalendarDb.calLp; i++)
+            CalendarDbDecorator.save();
+            foreach (var id in CalendarDbDecorator.CalendarIds)
             {
-                Calendar_ComboBox.Items.Add(i + 1);
+                Calendar_ComboBox.Items.Add(id);
+            }
+            
+            day_container.Controls.Clear();
+            UI_container.Controls.Clear();
+            CalendarDbDecorator.CalendarTasks.Clear();
+            daysList.Clear();
+            DisplayDays();
+            DisplayUI();
+        }
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (Calendar_ComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("you have to choose a calendar you want to delete", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+
+                CalendarDbDecorator.Delete(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+                Calendar_ComboBox.Items.Remove(Calendar_ComboBox.SelectedItem);
+                day_container.Controls.Clear();
+                UI_container.Controls.Clear();
+                CalendarDbDecorator.CalendarTasks.Clear();
+                daysList.Clear();
+                DisplayDays();
+                DisplayUI();
             }
         }
-
         private void label8_Click_1(object sender, EventArgs e)
         {
 
@@ -190,6 +212,12 @@ namespace Calendar
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void logOut_button_Click(object sender, EventArgs e)
+        {
+            new Form2().Show();
+            this.Close();
         }
 
         private void label5_Click(object sender, EventArgs e)

@@ -2,18 +2,19 @@
 
 namespace Calendar.Models
 {
-    [Serializable]
     public class CalendarTask
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
-        public CalendarTask(int id, string title, DateTime date)
+        public int CalendarID { get; set; }
+
+        public CalendarTask(int id, string title, DateTime date, int CalendarID)
         {
             Id = id;
             Title = title;
             Date = date;
-            
+            this.CalendarID = CalendarID;
         }
         
     }

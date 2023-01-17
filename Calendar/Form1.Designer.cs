@@ -46,10 +46,12 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.save_button = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
-            this.CreateButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.Calendar_ComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.logOut_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -197,7 +199,7 @@
             // 
             // save_button
             // 
-            this.save_button.Location = new System.Drawing.Point(934, 310);
+            this.save_button.Location = new System.Drawing.Point(811, 316);
             this.save_button.Name = "save_button";
             this.save_button.Size = new System.Drawing.Size(111, 56);
             this.save_button.TabIndex = 13;
@@ -215,16 +217,6 @@
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
-            // CreateButton
-            // 
-            this.CreateButton.Location = new System.Drawing.Point(811, 310);
-            this.CreateButton.Name = "CreateButton";
-            this.CreateButton.Size = new System.Drawing.Size(111, 56);
-            this.CreateButton.TabIndex = 16;
-            this.CreateButton.Text = "Create new calendar";
-            this.CreateButton.UseVisualStyleBackColor = true;
-            this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
-            // 
             // deleteButton
             // 
             this.deleteButton.Location = new System.Drawing.Point(823, 516);
@@ -233,6 +225,7 @@
             this.deleteButton.TabIndex = 15;
             this.deleteButton.Text = "Delete calendar";
             this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // Calendar_ComboBox
             // 
@@ -253,15 +246,45 @@
             this.label8.Text = "choose calendar";
             this.label8.Click += new System.EventHandler(this.label8_Click_1);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(909, 580);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(238, 29);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Save this calendar database";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(909, 615);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(238, 29);
+            this.button2.TabIndex = 20;
+            this.button2.Text = "Load previous calendar database";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // logOut_button
+            // 
+            this.logOut_button.Location = new System.Drawing.Point(1056, 12);
+            this.logOut_button.Name = "logOut_button";
+            this.logOut_button.Size = new System.Drawing.Size(91, 29);
+            this.logOut_button.TabIndex = 21;
+            this.logOut_button.Text = "log out";
+            this.logOut_button.UseVisualStyleBackColor = true;
+            this.logOut_button.Click += new System.EventHandler(this.logOut_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1159, 647);
+            this.Controls.Add(this.logOut_button);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.Calendar_ComboBox);
-            this.Controls.Add(this.CreateButton);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.save_button);
@@ -307,9 +330,11 @@
         private TextBox textBox1;
         private Button save_button;
         private Button loadButton;
-        private Button CreateButton;
         private Button deleteButton;
         private ComboBox Calendar_ComboBox;
         private Label label8;
+        private Button button1;
+        private Button button2;
+        private Button logOut_button;
     }
 }

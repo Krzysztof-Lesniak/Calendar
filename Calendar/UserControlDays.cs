@@ -40,8 +40,8 @@ namespace Calendar
         }
         public void AddTaskFromMemory(DateTime dateOfTask)
         {
-            var numberOfSameDateTasks = CalendarDb.CalendarTasks.Count(x => x.Date == dateOfTask);
-            List<CalendarTask> newList = CalendarDb.CalendarTasks.Where(p => p.Date == dateOfTask).ToList();
+            var numberOfSameDateTasks = CalendarDbDecorator.CalendarTasks.Count(x => x.Date == dateOfTask);
+            List<CalendarTask> newList = CalendarDbDecorator.CalendarTasks.Where(p => p.Date == dateOfTask).ToList();
             foreach (var task in newList)
             {
                 checkedListBox1.Items.Add(task.Title);
