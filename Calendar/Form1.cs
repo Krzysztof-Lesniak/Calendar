@@ -11,7 +11,6 @@ namespace Calendar
         int month, year;
         int daysInMonth;
         bool isLoaded = false;
-
         UserControlUI uI = new UserControlUI();
         public Form1(User logedInUser)
         {
@@ -147,9 +146,9 @@ namespace Calendar
             }
             else
             {
+                CalendarDbDecorator.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
-                CalendarDbDecorator.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
                 DisplayDays();
                 DisplayUI();
             }
@@ -162,9 +161,9 @@ namespace Calendar
             if (isLoaded) CalendarDbDecorator.save(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
             else CalendarDbDecorator.save();
 
-            foreach (var id in CalendarDbDecorator.CalendarIds)
+            foreach (var calendars in CalendarDbDecorator.CalendarObjects)
             {
-                Calendar_ComboBox.Items.Add(id);
+                Calendar_ComboBox.Items.Add(calendars.Id);
             }
             
             day_container.Controls.Clear();

@@ -20,32 +20,26 @@ namespace Calendar.Database
         public static int taskNr { get; set; } = 0;
 
         private static CalendarDb _calendarDb = new CalendarDb();
-        public static List<int> CalendarIds => _calendarDb.CalendarIds;
         
 
 
         public static void save(int nrOfCalendar) //invoked when calendar is loaded
         {
-            CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList.Clear();
-            CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList = CalendarTasks;
+            //CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList.Clear();
+            //CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList = CalendarTasks;
 
-            
-            //string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            //string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + nrOfCalendar + ".json");
-            //var z = JsonConvert.SerializeObject(_calendarDb);
-            //File.WriteAllText(fullPathOfFile, z);
+
         }
         public static void save() //ivoked when calendar is new
         {
-            calNr++;
+            var calNr = CalendarObjects.Max(x => x.Id) + 1; 
+            taskNr = 0;
             CalendarObj CalendarObject = new CalendarObj(calNr);
             CalendarObject.TaskList = CalendarTasks;
             CalendarObject.Id = calNr;
+            CalendarObjects.Add(CalendarObject);
             // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
-            CalendarIds.Add(calNr);
-            
-            
-            
+            SaveEverything();        
         }
 
         public static void Load(int calendarNumber)
