@@ -52,7 +52,7 @@ namespace Calendar
                     Find(x => x._userName == username_textBox.Text);
                 if (user._password == password_textBox.Text)
                 {
-                    new Form1(user).Show();
+                    new CalendarForm(user).Show();
                     this.Hide();
                 }
                 else

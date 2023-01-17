@@ -5,11 +5,10 @@ namespace Calendar.Database
 {
     internal class CalendarDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; };
+        public DbSet<User> Users { get; set; }
         public DbSet<CalendarTask> CalendarTasks { get; set; }
         public DbSet<CalendarObj> CalendarObjects { get; set; }
 
-        #region SINGLETON
         public static CalendarDbContext GetInstance()
         {
             var connectionString = "Data Source=sqlite.db";
@@ -22,6 +21,5 @@ namespace Calendar.Database
         {
 
         }
-        #endregion
     }
 }

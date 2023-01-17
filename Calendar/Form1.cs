@@ -5,17 +5,18 @@ using System.Security.Cryptography;
 
 namespace Calendar
 {
-    public partial class Form1 : Form
+    public partial class CalendarForm : Form
     {
         private User _logedInUser;
-        int month, year;
-        int daysInMonth;
-        bool isLoaded = false;
-        UserControlUI uI = new UserControlUI();
-        public Form1(User logedInUser)
+        private int month, year;
+        private int daysInMonth;
+        private UserControlUI uI = new UserControlUI();
+        private CalendarObj currentCalendar;
+        public CalendarForm(User logedInUser)
         {
             InitializeComponent();
             _logedInUser= logedInUser;
+            currentCalendar = new CalendarObj();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -60,9 +61,9 @@ namespace Calendar
                 UserControlDays ucdays = new UserControlDays();
                 ucdays.days(i);
                 
-                if (CalendarDbDecorator.CalendarTasks.Any(x => x.Date == new DateTime(year,month,i)))
+                if (currentCalendar.TaskList.Any(x => x.Date == new DateTime(year,month,i)))
                 {
-                    ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i));
+                    ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i),currentCalendar);
                 }
                 else if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i 
                     && !String.IsNullOrWhiteSpace(textBox1.Text))
@@ -126,18 +127,16 @@ namespace Calendar
         private void AddTask()
         {
             var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
-            var newCalendarTask = new CalendarTask(CalendarDbDecorator.taskNr, textBox1.Text, DateTime.Parse(dateString), 0); // to do typie
-            CalendarDbDecorator.CalendarTasks.Add(newCalendarTask);
-            CalendarDbDecorator.taskNr++;
+            var newCalendarTask = new CalendarTask(textBox1.Text, DateTime.Parse(dateString),currentCalendar.Id); // to do typie
+            currentCalendar.TaskList.Add(newCalendarTask);
             textBox1.Text = "";
         }
 
         private DateTime GetTheExistingTaskDate (int dayNumber)
         {
-            return CalendarDbDecorator.CalendarTasks.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
+            return currentCalendar.TaskList.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
         }
         
-
         private void loadButton_Click(object sender, EventArgs e)
         {
             if (Calendar_ComboBox.SelectedItem == null)
@@ -146,20 +145,20 @@ namespace Calendar
             }
             else
             {
-                CalendarDbDecorator.Load(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+                Guid calendarId = Guid.Parse(Calendar_ComboBox.SelectedItem.ToString());
+                currentCalendar = CalendarDbDecorator.Load(calendarId);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 DisplayDays();
                 DisplayUI();
             }
-            isLoaded= true;
         }
 
         private void save_button_Click(object sender, EventArgs e)
         {
             Calendar_ComboBox.Items.Clear();
-            if (isLoaded) CalendarDbDecorator.save(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
-            else CalendarDbDecorator.save();
+            
+            CalendarDbDecorator.save(currentCalendar);
 
             foreach (var calendars in CalendarDbDecorator.CalendarObjects)
             {
@@ -168,10 +167,9 @@ namespace Calendar
             
             day_container.Controls.Clear();
             UI_container.Controls.Clear();
-            CalendarDbDecorator.CalendarTasks.Clear();
+            currentCalendar = new CalendarObj();
             DisplayDays();
             DisplayUI();
-            isLoaded= false;
         }
         private void deleteButton_Click(object sender, EventArgs e)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Calendar
 {
-    partial class Form1
+    partial class CalendarForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -169,7 +169,7 @@
             // 
             // form1BindingSource
             // 
-            this.form1BindingSource.DataSource = typeof(Calendar.Form1);
+            this.form1BindingSource.DataSource = typeof(Calendar.CalendarForm);
             // 
             // UI_container
             // 

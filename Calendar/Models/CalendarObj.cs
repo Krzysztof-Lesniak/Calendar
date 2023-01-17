@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Calendar.Models
 {
-    internal class CalendarObj
+    public class CalendarObj
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<CalendarTask> TaskList { get; set; }
-        public CalendarObj(int id)
+        public List<CalendarTask> TaskList { get; set; } 
+        public CalendarObj()
         {
-            Id= id;
+            Id= Guid.NewGuid();
+            TaskList = new List<CalendarTask>();
         }
 
     }

@@ -16,50 +16,33 @@ namespace Calendar.Database
         public static List<User> Users => _calendarDb.Users;
         public static List<CalendarTask> CalendarTasks => _calendarDb.CalendarTasks;
         public static List<CalendarObj> CalendarObjects => _calendarDb.CalendarObjects;
-        public static int calNr { get; set; } = 0;
         public static int taskNr { get; set; } = 0;
 
         private static CalendarDb _calendarDb = new CalendarDb();
         
-
-
-        public static void save(int nrOfCalendar) //invoked when calendar is loaded
+        public static void save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
-            //CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList.Clear();
-            //CalendarObjects.Find(x => x.Id == nrOfCalendar).TaskList = CalendarTasks;
 
-
-        }
-        public static void save() //ivoked when calendar is new
-        {
-            var calNr =CalendarObjects.Any() ? CalendarObjects.Max(x => x.Id) + 1 : 0;
-            taskNr = 0;
-            CalendarObj CalendarObject = new CalendarObj(calNr);
-            CalendarObject.TaskList = CalendarTasks;
-            CalendarObject.Id = calNr;
-            CalendarObjects.Add(CalendarObject);
+            CalendarObjects.Add(calendarToSave);
             // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
-            SaveEverything();        
+            SaveEverything();  
+            
         }
 
-        public static void Load(int calendarNumber)
+        public static CalendarObj Load(Guid calendarId)
         {
             CalendarTasks.Clear();
-            taskNr = 0;
+            CalendarObjects.Clear();
             LoadEverything();
-            var loadedCalendar = CalendarObjects.Find(x => x.Id == calendarNumber);
-            foreach (var task in loadedCalendar.TaskList)
-            {
-                CalendarTasks.Add(task);
-            }
+            var loadedCalendar = CalendarObjects.Find(x => x.Id == calendarId);
+            return loadedCalendar;
 
 
         }
         public static void Delete(int calendarNumber)
         {
-            calNr--;
             string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            string fullPathOfFile = Path.Combine(dir, "calendar_nr_" + calendarNumber.ToString() + ".json");
+            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
             File.Delete(fullPathOfFile);
         }
         public static void SaveEverything()

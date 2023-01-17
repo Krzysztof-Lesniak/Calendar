@@ -38,10 +38,10 @@ namespace Calendar
         {
             checkedListBox1.Items.Add(text);
         }
-        public void AddTaskFromMemory(DateTime dateOfTask)
+        public void AddTaskFromMemory(DateTime dateOfTask,CalendarObj currentCalendar)
         {
-            var numberOfSameDateTasks = CalendarDbDecorator.CalendarTasks.Count(x => x.Date == dateOfTask);
-            List<CalendarTask> newList = CalendarDbDecorator.CalendarTasks.Where(p => p.Date == dateOfTask).ToList();
+            var numberOfSameDateTasks = currentCalendar.TaskList.Count(x => x.Date == dateOfTask);
+            List<CalendarTask> newList = currentCalendar.TaskList.Where(p => p.Date == dateOfTask).ToList();
             foreach (var task in newList)
             {
                 checkedListBox1.Items.Add(task.Title);
