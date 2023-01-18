@@ -28,8 +28,13 @@ namespace Calendar
                 textBox1.Hide();
                 buttonAddTask.Hide();
             }
+            
             DisplayDays();
             DisplayUI();
+            foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
+            {
+                Calendar_ComboBox.Items.Add(calendars.Id);
+            }
         }
         void DisplayUI()
         {
@@ -42,8 +47,6 @@ namespace Calendar
                     uI.comboBoxDays.Items.Add(i);
                 }
             }
-            
-
         }
         void DisplayDays()
         {
@@ -70,9 +73,7 @@ namespace Calendar
                 {
                     ucdays.AddTask(textBox1.Text);
                 }
-
                 day_container.Controls.Add((ucdays));
-
             }
             
             SetYearMonth();
@@ -122,7 +123,6 @@ namespace Calendar
                 day_container.Controls.Clear();
                 DisplayDays();
             }
-            
         }
         private void AddTask()
         {
@@ -151,14 +151,16 @@ namespace Calendar
                 UI_container.Controls.Clear();
                 DisplayDays();
                 DisplayUI();
+                Calendar_ComboBox.SelectedItem = null;
             }
         }
 
         private void save_button_Click(object sender, EventArgs e)
         {
-            Calendar_ComboBox.Items.Clear();
             
             CalendarDbDecorator.save(currentCalendar);
+
+            Calendar_ComboBox.Items.Clear();
 
             foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
             {
@@ -179,12 +181,10 @@ namespace Calendar
             }
             else
             {
-
                 CalendarDbDecorator.Delete(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
                 Calendar_ComboBox.Items.Remove(Calendar_ComboBox.SelectedItem);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
-                CalendarDbDecorator.CalendarTasks.Clear();
                 DisplayDays();
                 DisplayUI();
             }

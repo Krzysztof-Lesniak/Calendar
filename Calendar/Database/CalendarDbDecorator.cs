@@ -13,12 +13,6 @@ namespace Calendar.Database
 {
     internal static class CalendarDbDecorator
     {
-        public static List<User> Users => _calendarDb.Users;//todo private + metody do obsługi
-        public static List<CalendarTask> CalendarTasks => _calendarDb.CalendarTasks;//todo private + metody do obsługi 
-        public static List<CalendarObj> CalendarObjects => _dbContext.CalendarObjects.ToList();//todo private + metody do obsługi GetAllCalendarObjects i AddCalendarObject
-
-        public static int taskNr { get; set; } = 0;
-
         private static CalendarDb _calendarDb = new CalendarDb();//todo delete po przepisaniu wszystkich odwołań na dbcontext
         private static CalendarDbContext _dbContext;
 
@@ -32,16 +26,29 @@ namespace Calendar.Database
             return _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == id);
         }
 
-        
+        public static void AddUser(string username,string password, role role)
+        {
+            _dbContext.Users.Add(new User(username,password,role));
+            _dbContext.SaveChanges();
+        }
+
+        public static bool IfUserExists(string userName)
+        {
+           return _dbContext.Users.Any(x => x.UserName == userName);
+        }
+
+        public static User FindUser(string userName)
+        {
+            return _dbContext.Users.FirstOrDefault(x => x.UserName == userName);
+        }
+
         public static void save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
-
             _dbContext.CalendarObjects.Add(calendarToSave);
             _dbContext.SaveChanges();
             
             // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
             SaveEverything();  
-            
         }
 
         public static CalendarObj Load(Guid calendarId)
@@ -73,6 +80,10 @@ namespace Calendar.Database
             var tempStringLoad = File.ReadAllText(fullPathOfFile);
             _calendarDb = JsonConvert.DeserializeObject<CalendarDb>(tempStringLoad);
         }
-    
+
+        internal static List<CalendarObj> GetAllCalendarObjects()
+        {
+            return _dbContext.CalendarObjects.ToList();
+        }
     }
 }

@@ -39,17 +39,13 @@ namespace Calendar
             {
                 CalendarDbDecorator.LoadEverything();
             }
-            
-            CalendarDbDecorator.Users.Add(new User("a", "a", role.hirer));
-            
         }
 
         private void LogIn_button_Click(object sender, EventArgs e)
         {
-            if (CalendarDbDecorator.Users.Any(x => x.UserName == username_textBox.Text))
+            if (CalendarDbDecorator.IfUserExists(username_textBox.Text))
             {
-                var user = CalendarDbDecorator.Users.
-                    Find(x => x.UserName == username_textBox.Text);
+                var user = CalendarDbDecorator.FindUser(username_textBox.Text);
                 if (user.Password == password_textBox.Text)
                 {
                     new CalendarForm(user).Show();
@@ -65,7 +61,6 @@ namespace Calendar
             }
             else
             {
-                
                 MessageBox.Show("there is no user with that username", "Try again", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 username_textBox.Clear();
                 password_textBox.Clear();
