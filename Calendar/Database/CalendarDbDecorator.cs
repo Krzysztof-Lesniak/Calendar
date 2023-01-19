@@ -21,9 +21,9 @@ namespace Calendar.Database
             _dbContext = new CalendarDbContext();
         }
 
-        public static CalendarObj FindCalendarObj(Guid id)
+        public static CalendarObj FindCalendarObj(string calendarName)
         {
-            return _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == id);
+            return _dbContext.CalendarObjects.FirstOrDefault(x => x.Name == calendarName);
         }
 
         public static void AddUser(string username,string password, role role)
@@ -42,6 +42,10 @@ namespace Calendar.Database
             return _dbContext.Users.FirstOrDefault(x => x.UserName == userName);
         }
 
+        public static bool IsCalendarNameUsed(string userName) 
+        {
+            return _dbContext.Users.Any(x =>x.UserName == userName);
+        }
         public static void save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
             _dbContext.CalendarObjects.Add(calendarToSave);
@@ -51,19 +55,17 @@ namespace Calendar.Database
             SaveEverything();  
         }
 
-        public static CalendarObj Load(Guid calendarId)
+        public static CalendarObj Load(string calendarName)
         {
             LoadEverything();
-            var loadedCalendar = FindCalendarObj(calendarId);
+            var loadedCalendar = FindCalendarObj(calendarName);
             return loadedCalendar;
 
 
         }
         public static void Delete(int calendarNumber)
         {
-            string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
-            File.Delete(fullPathOfFile);
+            
         }
         public static void SaveEverything()
         {

@@ -66,6 +66,7 @@
             this.NewUserPassword_TextBox.Name = "NewUserPassword_TextBox";
             this.NewUserPassword_TextBox.Size = new System.Drawing.Size(197, 27);
             this.NewUserPassword_TextBox.TabIndex = 2;
+            this.NewUserPassword_TextBox.TextChanged += new System.EventHandler(this.NewUserPassword_TextBox_TextChanged);
             // 
             // RepeatPassword_Textbox
             // 

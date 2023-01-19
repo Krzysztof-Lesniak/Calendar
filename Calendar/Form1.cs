@@ -17,6 +17,7 @@ namespace Calendar
             InitializeComponent();
             _logedInUser= logedInUser;
             currentCalendar = new CalendarObj();
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -157,7 +158,7 @@ namespace Calendar
 
         private void save_button_Click(object sender, EventArgs e)
         {
-            
+            currentCalendar.Name = CalendarName_TextBox.Text;
             CalendarDbDecorator.save(currentCalendar);
 
             Calendar_ComboBox.Items.Clear();
