@@ -35,10 +35,7 @@ namespace Calendar
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            if (File.Exists(@"C:\Users\Krzysztof\source\repos\Calendar\calendar_db_.json"))
-            {
-                CalendarDbDecorator.LoadEverything();
-            }
+           
         }
 
         private void LogIn_button_Click(object sender, EventArgs e)

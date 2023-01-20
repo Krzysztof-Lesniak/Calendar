@@ -8,22 +8,15 @@ namespace Calendar
     public partial class CalendarForm : Form
     {
         private User _logedInUser;
-        private int month, year;
-        private int daysInMonth;
         private UserControlUI uI = new UserControlUI();
-        private CalendarObj currentCalendar;
+        private bool _isLoaded;
         public CalendarForm(User logedInUser)
         {
             InitializeComponent();
             _logedInUser= logedInUser;
-            currentCalendar = new CalendarObj();
-            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            DateTime now = DateTime.Now;
-            month = now.Month;
-            year = now.Year;
             if(_logedInUser.Role == role.specialist)
             {
                 textBox1.Hide();
@@ -34,7 +27,7 @@ namespace Calendar
             DisplayUI();
             foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
             {
-                Calendar_ComboBox.Items.Add(calendars.Id);
+                Calendar_ComboBox.Items.Add(calendars.Name);
             }
         }
         void DisplayUI()
@@ -43,7 +36,7 @@ namespace Calendar
             {
                 uI.comboBoxDays.Items.Clear();
                 UI_container.Controls.Add(uI);
-                for (int i = 1; i <= daysInMonth; i++)
+                for (int i = 1; i <= CalendarLogic.daysInMonth; i++)
                 {
                     uI.comboBoxDays.Items.Add(i);
                 }
@@ -51,23 +44,26 @@ namespace Calendar
         }
         void DisplayDays()
         {
-            var startOfTheMonth = new DateTime(year, month, 1);
-            daysInMonth = DateTime.DaysInMonth(year, month);
-            int dayOfTheWeek = Convert.ToInt32(startOfTheMonth.DayOfWeek.ToString("d"));
-            for (int i = 0; i < dayOfTheWeek; i++)
+            var startingDay = CalendarLogic.GetNumberOfStartingDayOfTheWeek();
+            for (int i = 0; i <startingDay; i++)
             {
                 UserControlBlanc ucblanc = new UserControlBlanc();
                 day_container.Controls.Add(ucblanc);
             }
 
-            for (int i = 1; i <= daysInMonth ; i++)
+            var numberOfDays = CalendarLogic.daysInMonth;
+            for (int i = 1; i <= numberOfDays ; i++)
             {
                 UserControlDays ucdays = new UserControlDays();
                 ucdays.days(i);
-                
-                if (currentCalendar.TaskList.Any(x => x.Date == new DateTime(year,month,i)))
+
+                var tempDate = new DateTime(CalendarLogic.year, CalendarLogic.month, i);
+                if (CalendarLogic.currentCalendar.TaskList.Any(x => x.Date == tempDate))
                 {
-                    ucdays.AddTaskFromMemory(GetTheExistingTaskDate(i),currentCalendar);
+                    var thisDate = new DateTime(CalendarLogic.year, CalendarLogic.month, i);
+                    var existingTaskDate = CalendarLogic.currentCalendar.TaskList.Find(x => x.Date == thisDate).Date;
+
+                    ucdays.AddTaskFromMemory(existingTaskDate, CalendarLogic.currentCalendar);
                 }
                 else if (Convert.ToInt32(uI.comboBoxDays.SelectedItem) == i 
                     && !String.IsNullOrWhiteSpace(textBox1.Text))
@@ -76,8 +72,8 @@ namespace Calendar
                 }
                 day_container.Controls.Add((ucdays));
             }
-            
-            SetYearMonth();
+
+            DateLabel.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(CalendarLogic.month) + " " + CalendarLogic.year;
         }
 
         private void next_month_Click(object sender, EventArgs e)
@@ -85,12 +81,8 @@ namespace Calendar
             day_container.Controls.Clear();
             UI_container.Controls.Clear();
 
-            month++;
-            if (month == 13) 
-            {
-                month = 1;
-                year++;
-            }
+            CalendarLogic.NextMonthChange();
+
             DisplayDays();
             DisplayUI();
         }
@@ -98,19 +90,13 @@ namespace Calendar
         {
             day_container.Controls.Clear();
             UI_container.Controls.Clear();
-            month--;
-            if (month == 0)
-            {
-                month = 12;
-                year--;
-            }
+            
+            CalendarLogic.PrevMonthChange();
+
             DisplayDays();
             DisplayUI();
         }
-        public void SetYearMonth()
-        {
-            DateLabel.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(month) +" "+ year;
-        } 
+        
         private void buttonAddTask_Click(object sender, EventArgs e)
         {
             
@@ -120,22 +106,12 @@ namespace Calendar
             }
             else
             {
-                AddTask();
+                var taskTextString = Convert.ToString(uI.comboBoxDays.SelectedItem);
+                CalendarLogic.AddTask(taskTextString, textBox1.Text);
+                textBox1.Text = "";
                 day_container.Controls.Clear();
                 DisplayDays();
             }
-        }
-        private void AddTask()
-        {
-            var dateString = Convert.ToString(uI.comboBoxDays.SelectedItem) + '/' + Convert.ToString(month) + '/' + Convert.ToString(year);
-            var newCalendarTask = new CalendarTask(textBox1.Text, DateTime.Parse(dateString),currentCalendar.Id); // to do typie
-            currentCalendar.TaskList.Add(newCalendarTask);
-            textBox1.Text = "";
-        }
-
-        private DateTime GetTheExistingTaskDate (int dayNumber)
-        {
-            return currentCalendar.TaskList.Find(x => x.Date == new DateTime(year, month, dayNumber)).Date;
         }
         
         private void loadButton_Click(object sender, EventArgs e)
@@ -146,43 +122,67 @@ namespace Calendar
             }
             else
             {
-                Guid calendarId = Guid.Parse(Calendar_ComboBox.SelectedItem.ToString());
-                currentCalendar = CalendarDbDecorator.Load(calendarId);
+                var calendarName = Calendar_ComboBox.SelectedItem.ToString();
+
+                CalendarLogic.currentCalendar = new CalendarObj();
+                CalendarLogic.currentCalendar = CalendarDbDecorator.Load(calendarName);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 DisplayDays();
                 DisplayUI();
                 Calendar_ComboBox.SelectedItem = null;
+                _isLoaded= true;
             }
         }
 
         private void save_button_Click(object sender, EventArgs e)
         {
-            currentCalendar.Name = CalendarName_TextBox.Text;
-            CalendarDbDecorator.save(currentCalendar);
-
-            Calendar_ComboBox.Items.Clear();
-
-            foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
+            if (CalendarName_TextBox != null
+                && !string.IsNullOrWhiteSpace(CalendarName_TextBox.Text)
+                && !CalendarDbDecorator.IsCalendarNameUsed(CalendarName_TextBox.Text))
             {
-                Calendar_ComboBox.Items.Add(calendars.Id);
+                CalendarLogic.currentCalendar.Name = CalendarName_TextBox.Text;
+                CalendarDbDecorator.Save(CalendarLogic.currentCalendar);
+
+                Calendar_ComboBox.Items.Clear();
+
+                foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
+                {
+                    Calendar_ComboBox.Items.Add(calendars.Name);
+                }
+
+                day_container.Controls.Clear();
+                UI_container.Controls.Clear();
+                CalendarLogic.currentCalendar = new CalendarObj();
+                DisplayDays();
+                DisplayUI();
+                _isLoaded = false;
             }
-            
-            day_container.Controls.Clear();
-            UI_container.Controls.Clear();
-            currentCalendar = new CalendarObj();
-            DisplayDays();
-            DisplayUI();
+            else if (_isLoaded && (string.IsNullOrWhiteSpace(CalendarName_TextBox.Text) || CalendarName_TextBox == null))
+            {
+                CalendarDbDecorator.Update(CalendarLogic.currentCalendar);
+                day_container.Controls.Clear();
+                UI_container.Controls.Clear();
+                DisplayDays();
+                DisplayUI();
+                _isLoaded = false;
+
+            }
+            else
+            {
+                MessageBox.Show("please provide valid name for the calendar", "insufissient namme", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void deleteButton_Click(object sender, EventArgs e)
         {
             if (Calendar_ComboBox.SelectedItem == null)
             {
-                MessageBox.Show("you have to choose a calendar you want to delete", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("you have to choose a calendar you want to delete", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                CalendarDbDecorator.Delete(Convert.ToInt32(Calendar_ComboBox.SelectedItem));
+                var calendarName = Calendar_ComboBox.SelectedItem.ToString();
+                CalendarDbDecorator.Delete(calendarName);
                 Calendar_ComboBox.Items.Remove(Calendar_ComboBox.SelectedItem);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
@@ -192,7 +192,6 @@ namespace Calendar
         }
         private void CloseAndSave_button_Click(object sender, EventArgs e)
         {
-            CalendarDbDecorator.SaveEverything();
             Application.Exit();
         }
         private void label8_Click_1(object sender, EventArgs e)

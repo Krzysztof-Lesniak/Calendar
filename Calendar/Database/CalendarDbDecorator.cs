@@ -19,6 +19,15 @@ namespace Calendar.Database
         static CalendarDbDecorator()
         {
             _dbContext = new CalendarDbContext();
+            foreach (var calendar in _dbContext.CalendarObjects)
+            {
+                if(calendar.Name == null)
+                {
+                    var rand = new Random();
+                    var stringRand = rand.Next().ToString();
+                    calendar.Name = stringRand;
+                }
+            }
         }
 
         public static CalendarObj FindCalendarObj(string calendarName)
@@ -46,43 +55,46 @@ namespace Calendar.Database
         {
             return _dbContext.Users.Any(x =>x.UserName == userName);
         }
-        public static void save(CalendarObj calendarToSave) //ivoked when calendar is new
+        public static void Save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
             _dbContext.CalendarObjects.Add(calendarToSave);
             _dbContext.SaveChanges();
+        }
+        public static void Update(CalendarObj calendarToSave) //ivoked when calendar is loaded
+        {
+            var tempCalendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == calendarToSave.Id);
+            foreach (var task in calendarToSave.TaskList)
+            {
+                if (tempCalendar.TaskList.Any(x => x.Id != task.Id))
+                {
+                    tempCalendar.TaskList.Add(task);
+                }
+            }
+            foreach (var task in tempCalendar.TaskList)
+            {
+                if (calendarToSave.TaskList.Any(x => x.Id != task.Id))
+                {
+                    tempCalendar.TaskList.Remove(task);
+                }
+            }
             
-            // Add CalendarObject to CalendarObjects in the way that the elements will not be errased
-            SaveEverything();  
+            
+            _dbContext.SaveChanges();
         }
 
         public static CalendarObj Load(string calendarName)
         {
-            LoadEverything();
             var loadedCalendar = FindCalendarObj(calendarName);
             return loadedCalendar;
 
 
         }
-        public static void Delete(int calendarNumber)
+        public static void Delete(string calendarName)
         {
-            
+            var calendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Name == calendarName);
+            _dbContext.CalendarObjects.Remove(calendar);
+            _dbContext.SaveChanges();
         }
-        public static void SaveEverything()
-        {
-            string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
-            var z = JsonConvert.SerializeObject(_calendarDb);
-            File.WriteAllText(fullPathOfFile, z);
-        }
-
-        public static void LoadEverything()
-        {
-            string dir = @"C:\Users\Krzysztof\source\repos\Calendar";
-            string fullPathOfFile = Path.Combine(dir, "calendar_db_.json");
-            var tempStringLoad = File.ReadAllText(fullPathOfFile);
-            _calendarDb = JsonConvert.DeserializeObject<CalendarDb>(tempStringLoad);
-        }
-
         internal static List<CalendarObj> GetAllCalendarObjects()
         {
             return _dbContext.CalendarObjects.ToList();
