@@ -1,4 +1,5 @@
-﻿using Calendar.Models;
+﻿using Calendar.Database;
+using Calendar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,7 @@ namespace Calendar
                 + '/' + Convert.ToString(month) 
                 + '/' + Convert.ToString(year);
             var newCalendarTask = new CalendarTask(textOfTask, DateTime.Parse(dateString), currentCalendar.Id);
+            CalendarDbDecorator.AddTask(newCalendarTask);
             currentCalendar.TaskList.Add(newCalendarTask);
         }
 

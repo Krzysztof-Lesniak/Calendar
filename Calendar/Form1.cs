@@ -1,5 +1,6 @@
 using Calendar.Database;
 using Calendar.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Security.Cryptography;
 
@@ -123,13 +124,13 @@ namespace Calendar
             else
             {
                 var calendarName = Calendar_ComboBox.SelectedItem.ToString();
-
-                CalendarLogic.currentCalendar = new CalendarObj();
+                
                 CalendarLogic.currentCalendar = CalendarDbDecorator.Load(calendarName);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 DisplayDays();
                 DisplayUI();
+                CalendarName_TextBox.Text = calendarName;
                 Calendar_ComboBox.SelectedItem = null;
                 _isLoaded= true;
             }
@@ -139,7 +140,7 @@ namespace Calendar
         {
             if (CalendarName_TextBox != null
                 && !string.IsNullOrWhiteSpace(CalendarName_TextBox.Text)
-                && !CalendarDbDecorator.IsCalendarNameUsed(CalendarName_TextBox.Text))
+                && !CalendarDbDecorator.IsCalendarIdUsed(CalendarLogic.currentCalendar.Id))
             {
                 CalendarLogic.currentCalendar.Name = CalendarName_TextBox.Text;
                 CalendarDbDecorator.Save(CalendarLogic.currentCalendar);
@@ -158,10 +159,11 @@ namespace Calendar
                 DisplayUI();
                 _isLoaded = false;
             }
-            else if (_isLoaded && (string.IsNullOrWhiteSpace(CalendarName_TextBox.Text) || CalendarName_TextBox == null))
+            else if (_isLoaded && (!string.IsNullOrWhiteSpace(CalendarName_TextBox.Text)))
             {
-                
+
                 CalendarDbDecorator.Update(CalendarLogic.currentCalendar);
+
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 DisplayDays();

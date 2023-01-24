@@ -51,36 +51,40 @@ namespace Calendar.Database
             return _dbContext.Users.FirstOrDefault(x => x.UserName == userName);
         }
 
-        public static bool IsCalendarNameUsed(string userName) 
+        public static bool IsCalendarIdUsed(Guid id) 
         {
-            return _dbContext.Users.Any(x =>x.UserName == userName);
+            return _dbContext.CalendarObjects.Any(x => x.Id == id);
         }
         public static void Save(CalendarObj calendarToSave) //ivoked when calendar is new
         {
             _dbContext.CalendarObjects.Add(calendarToSave);
             _dbContext.SaveChanges();
         }
-        public static void Update(CalendarObj calendarToSave) //ivoked when calendar is loaded
+
+        public static void Update(CalendarObj currentCalendar)
         {
-            var tempCalendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == calendarToSave.Id);
-            foreach (var task in calendarToSave.TaskList)
-            {
-                if (tempCalendar.TaskList.Any(x => x.Id != task.Id))
-                {
-                    tempCalendar.TaskList.Add(task);
-                }
-            }
-            foreach (var task in tempCalendar.TaskList)
-            {
-                if (calendarToSave.TaskList.Any(x => x.Id != task.Id))
-                {
-                    tempCalendar.TaskList.Remove(task);
-                }
-            }
-            
-            
+
+            CalendarObj entity = FindCalendarObj(currentCalendar.Name);
+            _dbContext.Entry(entity).CurrentValues.SetValues(currentCalendar);
             _dbContext.SaveChanges();
+
+            //var tempCalendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == calendarToSave.Id);
+            //foreach (var task in calendarToSave.TaskList)
+            //{
+            //    if (tempCalendar.TaskList.Any(x => x.Id != task.Id))
+            //    {
+            //        tempCalendar.TaskList.Add(task);
+            //    }
+            //}
+            //foreach (var task in tempCalendar.TaskList)
+            //{
+            //    if (calendarToSave.TaskList.Any(x => x.Id != task.Id))
+            //    {
+            //        tempCalendar.TaskList.Remove(task);
+            //    }
+            //}
         }
+      
 
         public static CalendarObj Load(string calendarName)
         {
@@ -98,6 +102,12 @@ namespace Calendar.Database
         internal static List<CalendarObj> GetAllCalendarObjects()
         {
             return _dbContext.CalendarObjects.ToList();
+        }
+
+        internal static void AddTask(CalendarTask newCalendarTask)
+        {
+            _dbContext.CalendarTasks.Add(newCalendarTask);
+            _dbContext.SaveChanges();
         }
     }
 }

@@ -51,11 +51,11 @@ namespace Calendar
 
                 if (Hirer_checkBox.Checked)
                 {
-                    CalendarDbDecorator.AddUser(NewUserUsername_TextBox.Text, Hashing.ToSHA256(NewUserPassword_TextBox.Text), role.hirer);
+                    CalendarDbDecorator.AddUser(NewUserUsername_TextBox.Text, NewUserPassword_TextBox.Text.ToSHA256(), role.hirer);
                 }
                 else if (Specialist_CheckBox.Checked)
                 {
-                    CalendarDbDecorator.AddUser(NewUserUsername_TextBox.Text, Hashing.ToSHA256(NewUserPassword_TextBox.Text), role.specialist);
+                    CalendarDbDecorator.AddUser(NewUserUsername_TextBox.Text, NewUserPassword_TextBox.Text.ToSHA256(), role.specialist);
                 }
                 else
                 {
