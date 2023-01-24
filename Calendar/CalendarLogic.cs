@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Calendar
 {
-    internal class CalendarLogic
+    public class CalendarLogic
     {
-        private static DateTime now = DateTime.Now;
+        private static DateTime now  = DateTime.Now;
         public static int month { get; set; } = now.Month;
         public static int year { get; set; } = now.Year;
         public static int daysInMonth { get; set; } = DateTime.DaysInMonth(year, month);
@@ -26,6 +26,7 @@ namespace Calendar
             int dayOfTheWeek = Convert.ToInt32(dayName);
             return dayOfTheWeek;
         }
+
         public static void NextMonthChange()
         {
             month++;
