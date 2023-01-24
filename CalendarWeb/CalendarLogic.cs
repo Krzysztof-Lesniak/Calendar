@@ -47,7 +47,7 @@ namespace Calendar
                 + '/' + Convert.ToString(month) 
                 + '/' + Convert.ToString(year);
             var newCalendarTask = new CalendarTask(textOfTask, DateTime.Parse(dateString), currentCalendar.Id);
-            CalendarDbDecorator.AddTask(newCalendarTask);
+            //CalendarDbDecorator.AddTask(newCalendarTask);
             currentCalendar.TaskList.Add(newCalendarTask);
         }
 

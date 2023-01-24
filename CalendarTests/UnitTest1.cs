@@ -4,9 +4,9 @@ namespace CalendarTests
 {
     public class Tests
     {
-
+        //dodaæ testy na wszystkie metody z CalendarLogic
         [Test]
-        public void Test1()
+        public void TestGetNumberOfStartingDayOfTheWeek_Jan23_returns0()
         {
             CalendarLogic.year = 2023;
             CalendarLogic.month = 1;
