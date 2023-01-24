@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Calendar.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Calendar.Database
@@ -32,7 +34,7 @@ namespace Calendar.Database
 
         public static CalendarObj FindCalendarObj(string calendarName)
         {
-            return _dbContext.CalendarObjects.FirstOrDefault(x => x.Name == calendarName);
+            return _dbContext.CalendarObjects.Include(x => x.TaskList).FirstOrDefault(x => x.Name == calendarName);
         }
 
         public static void AddUser(string username,string password, role role)
@@ -63,26 +65,7 @@ namespace Calendar.Database
 
         public static void Update(CalendarObj currentCalendar)
         {
-
-            CalendarObj entity = FindCalendarObj(currentCalendar.Name);
-            _dbContext.Entry(entity).CurrentValues.SetValues(currentCalendar);
             _dbContext.SaveChanges();
-
-            //var tempCalendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Id == calendarToSave.Id);
-            //foreach (var task in calendarToSave.TaskList)
-            //{
-            //    if (tempCalendar.TaskList.Any(x => x.Id != task.Id))
-            //    {
-            //        tempCalendar.TaskList.Add(task);
-            //    }
-            //}
-            //foreach (var task in tempCalendar.TaskList)
-            //{
-            //    if (calendarToSave.TaskList.Any(x => x.Id != task.Id))
-            //    {
-            //        tempCalendar.TaskList.Remove(task);
-            //    }
-            //}
         }
       
 
@@ -93,9 +76,10 @@ namespace Calendar.Database
 
 
         }
-        public static void Delete(string calendarName)
+        public static void DeleteByName(string calendarName)
         {
-            var calendar = _dbContext.CalendarObjects.FirstOrDefault(x => x.Name == calendarName);
+            var calendar = _dbContext.CalendarObjects.Include(x => x.TaskList).FirstOrDefault(x => x.Name == calendarName);
+            _dbContext.CalendarTasks.RemoveRange(calendar.TaskList);
             _dbContext.CalendarObjects.Remove(calendar);
             _dbContext.SaveChanges();
         }

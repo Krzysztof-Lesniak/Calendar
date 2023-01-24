@@ -166,6 +166,7 @@ namespace Calendar
 
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
+                CalendarLogic.currentCalendar = new CalendarObj();
                 DisplayDays();
                 DisplayUI();
                 _isLoaded = false;
@@ -185,7 +186,7 @@ namespace Calendar
             else
             {
                 var calendarName = Calendar_ComboBox.SelectedItem.ToString();
-                CalendarDbDecorator.Delete(calendarName);
+                CalendarDbDecorator.DeleteByName(calendarName);
                 Calendar_ComboBox.Items.Remove(Calendar_ComboBox.SelectedItem);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
