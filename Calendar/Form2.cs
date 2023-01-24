@@ -43,7 +43,7 @@ namespace Calendar
             if (CalendarDbDecorator.IfUserExists(username_textBox.Text))
             {
                 var user = CalendarDbDecorator.FindUser(username_textBox.Text);
-                if (user.Password == Hashing.ToSHA256(password_textBox.Text))
+                if (user.Password == password_textBox.Text.ToSHA256())
                 {
                     new CalendarForm(user).Show();
                     this.Hide();

@@ -150,7 +150,7 @@ namespace Calendar
                 {
                     Calendar_ComboBox.Items.Add(calendars.Name);
                 }
-
+                CalendarName_TextBox.Clear();
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
                 CalendarLogic.currentCalendar = new CalendarObj();
@@ -160,6 +160,7 @@ namespace Calendar
             }
             else if (_isLoaded && (string.IsNullOrWhiteSpace(CalendarName_TextBox.Text) || CalendarName_TextBox == null))
             {
+                
                 CalendarDbDecorator.Update(CalendarLogic.currentCalendar);
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();
