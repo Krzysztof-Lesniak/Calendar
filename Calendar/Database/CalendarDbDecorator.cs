@@ -89,7 +89,7 @@ namespace Calendar.Database
         internal static List<CalendarObj> GetAllCalendarObjects()
         {
             using var client = new HttpClient();
-            var response = client.GetAsync("https://localhost:7030/CalendarControler/GetAllCalendarObjects").Result;
+            var response = client.GetAsync("https://localhost:7030/api/CalendarControler/GetAllCalendarObjects").Result;
             var allCalendarObjectsString = response.Content.ReadAsStringAsync().Result;
             var allCalendarObjects = JsonConvert.DeserializeObject<List<CalendarObj>>(allCalendarObjectsString);
 

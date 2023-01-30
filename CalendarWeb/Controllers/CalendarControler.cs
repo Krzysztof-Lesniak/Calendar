@@ -93,12 +93,5 @@ namespace CalendarWeb.Controllers
             return Ok();
         }
         
-        //Post: CalendarTask
-        [HttpPost("AddTask")]
-        public void AddTask(string selectedDay, string textOfTask)
-        {
-            var calendarLogic = new CalendarLogic();
-            calendarLogic.AddTask(selectedDay, textOfTask);
-        }
     }
 }
