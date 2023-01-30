@@ -5,16 +5,20 @@ namespace Calendar
 {
     public class CalendarLogic
     {
-        private static DateTime now  = DateTime.Now;
-        public static int month { get; set; } = now.Month;
-        public static int year { get; set; } = now.Year;
-        public static int daysInMonth { get; set; } = DateTime.DaysInMonth(year, month);
-        public static CalendarObj currentCalendar { get; set; } = new CalendarObj();
+        private readonly DateTime now;
+        public int month { get; set; }
+        public int year { get; set; } 
+        public int daysInMonth { get; set; } 
+        public CalendarObj currentCalendar { get; set; } = new CalendarObj();
         public CalendarLogic()
         {
+            now = DateTime.Now;
+            month = now.Month;
+            year = now.Year;
+            daysInMonth = DateTime.DaysInMonth(year, month);
         }
 
-        public static int GetNumberOfStartingDayOfTheWeek()
+        public  int GetNumberOfStartingDayOfTheWeek()
         {
             var startOfTheMonth = new DateTime(year, month, 1);
             var dayName = startOfTheMonth.DayOfWeek;
@@ -22,7 +26,7 @@ namespace Calendar
             return dayOfTheWeek;
         }
 
-        public static void NextMonthChange()
+        public  void NextMonthChange()
         {
             month++;
             if (month == 13)
@@ -31,7 +35,7 @@ namespace Calendar
                 year++;
             }
         }
-        public static void PrevMonthChange() 
+        public  void PrevMonthChange() 
         { 
             month--;
             if (month == 0)
@@ -41,7 +45,7 @@ namespace Calendar
             }
         
         }
-        public static void AddTask(string selectedDay, string textOfTask)
+        public  void AddTask(string selectedDay, string textOfTask)
         {
             var dateString = Convert.ToString(selectedDay) 
                 + '/' + Convert.ToString(month) 

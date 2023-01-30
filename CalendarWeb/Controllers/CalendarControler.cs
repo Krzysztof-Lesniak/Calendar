@@ -99,7 +99,5 @@ namespace CalendarWeb.Controllers
             dbContext.CalendarTasks.Add(newCalendarTask);
             dbContext.SaveChanges();
         }
-
-
     }
 }
