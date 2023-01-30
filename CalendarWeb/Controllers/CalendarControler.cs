@@ -31,8 +31,8 @@ namespace CalendarWeb.Controllers
         }
 
         //POST: api/User
-        [HttpPost("AddUser/{username}, {password}, {role}")]
-        public void AddUser(string username, string password, role role)
+        [HttpPost("AddUser")]
+        public void AddUser(string username,[FromBody] string password, role role)
         {
             dbContext.Users.Add(new User(username, password, role));
             dbContext.SaveChanges();
@@ -85,7 +85,8 @@ namespace CalendarWeb.Controllers
         [HttpDelete("DeleteByName/{calendarName}")]
         public IActionResult DeleteByName(string calendarName)
         {
-            var calendar = dbContext.CalendarObjects.Include(x => x.TaskList).FirstOrDefault(x => x.Name == calendarName);
+            var calendar = dbContext.CalendarObjects.Include(x => x.TaskList)
+                                                    .FirstOrDefault(x => x.Name == calendarName);
             dbContext.CalendarTasks.RemoveRange(calendar.TaskList);
             dbContext.CalendarObjects.Remove(calendar);
             dbContext.SaveChanges();
@@ -93,11 +94,11 @@ namespace CalendarWeb.Controllers
         }
         
         //Post: CalendarTask
-        [HttpPost("AddTask/{calendarTask}")]
-        public void AddTask(CalendarTask newCalendarTask)
+        [HttpPost("AddTask")]
+        public void AddTask(string selectedDay, string textOfTask)
         {
-            dbContext.CalendarTasks.Add(newCalendarTask);
-            dbContext.SaveChanges();
+            var calendarLogic = new CalendarLogic();
+            calendarLogic.AddTask(selectedDay, textOfTask);
         }
     }
 }

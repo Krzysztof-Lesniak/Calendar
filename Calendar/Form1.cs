@@ -110,7 +110,8 @@ namespace Calendar
             else
             {
                 var taskTextString = Convert.ToString(uI.comboBoxDays.SelectedItem);
-                CalendarLogic.AddTask(taskTextString, textBox1.Text);
+                var dbBecorator = new DbDecoratorWrapper();
+                CalendarLogic.AddTask(taskTextString, textBox1.Text, dbBecorator);
                 textBox1.Text = "";
                 day_container.Controls.Clear();
                 DisplayDays();

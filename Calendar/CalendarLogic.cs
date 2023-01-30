@@ -41,15 +41,27 @@ namespace Calendar
             }
         
         }
-        public static void AddTask(string selectedDay, string textOfTask)
+        public static void AddTask(string selectedDay, string textOfTask, ICalendarDb calendarDb)
         {
+
             var dateString = Convert.ToString(selectedDay) 
                 + '/' + Convert.ToString(month) 
                 + '/' + Convert.ToString(year);
             var newCalendarTask = new CalendarTask(textOfTask, DateTime.Parse(dateString), currentCalendar.Id);
-            CalendarDbDecorator.AddTask(newCalendarTask);
+            calendarDb.AddTask(newCalendarTask);
             currentCalendar.TaskList.Add(newCalendarTask);
         }
+    }
+    public interface ICalendarDb
+    {
+        void AddTask(CalendarTask calendarTask);
+    }
 
+    public class DbDecoratorWrapper : ICalendarDb
+    {
+        public void AddTask(CalendarTask calendarTask)
+        {
+            CalendarDbDecorator.AddTask(calendarTask);
+        }
     }
 }
