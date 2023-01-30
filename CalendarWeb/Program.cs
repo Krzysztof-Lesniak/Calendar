@@ -29,7 +29,6 @@ namespace CalendarWeb
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

@@ -36,7 +36,7 @@ namespace Calendar
             month--;
             if (month == 0)
             {
-                month = 1;
+                month = 12;
                 year--;
             }
         

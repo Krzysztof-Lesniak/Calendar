@@ -1,7 +1,9 @@
 using Calendar.Database;
 using Calendar.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Globalization;
+using System.Net.Http;
 using System.Security.Cryptography;
 
 namespace Calendar
@@ -146,7 +148,7 @@ namespace Calendar
                 CalendarDbDecorator.Save(CalendarLogic.currentCalendar);
 
                 Calendar_ComboBox.Items.Clear();
-
+                
                 foreach (var calendars in CalendarDbDecorator.GetAllCalendarObjects())
                 {
                     Calendar_ComboBox.Items.Add(calendars.Name);
@@ -162,7 +164,7 @@ namespace Calendar
             else if (_isLoaded && (!string.IsNullOrWhiteSpace(CalendarName_TextBox.Text)))
             {
 
-                CalendarDbDecorator.Update(CalendarLogic.currentCalendar);
+                CalendarDbDecorator.Update();
 
                 day_container.Controls.Clear();
                 UI_container.Controls.Clear();

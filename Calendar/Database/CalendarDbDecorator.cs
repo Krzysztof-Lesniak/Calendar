@@ -34,6 +34,11 @@ namespace Calendar.Database
 
         public static CalendarObj FindCalendarObj(string calendarName)
         {
+            using var client = new HttpClient();
+            var response = client.GetAsync("https://localhost:7030/CalendarControler/GetCalendarObject/" + calendarName).Result;
+            var allCalendarObjectsString = response.Content.ReadAsStringAsync().Result;
+            var allCalendarObjects = JsonConvert.DeserializeObject<CalendarObj>(allCalendarObjectsString);
+
             return _dbContext.CalendarObjects.Include(x => x.TaskList).FirstOrDefault(x => x.Name == calendarName);
         }
 
@@ -63,7 +68,7 @@ namespace Calendar.Database
             _dbContext.SaveChanges();
         }
 
-        public static void Update(CalendarObj currentCalendar)
+        public static void Update()
         {
             _dbContext.SaveChanges();
         }
@@ -73,8 +78,6 @@ namespace Calendar.Database
         {
             var loadedCalendar = FindCalendarObj(calendarName);
             return loadedCalendar;
-
-
         }
         public static void DeleteByName(string calendarName)
         {
@@ -85,7 +88,12 @@ namespace Calendar.Database
         }
         internal static List<CalendarObj> GetAllCalendarObjects()
         {
-            return _dbContext.CalendarObjects.ToList();
+            using var client = new HttpClient();
+            var response = client.GetAsync("https://localhost:7030/CalendarControler/GetAllCalendarObjects").Result;
+            var allCalendarObjectsString = response.Content.ReadAsStringAsync().Result;
+            var allCalendarObjects = JsonConvert.DeserializeObject<List<CalendarObj>>(allCalendarObjectsString);
+
+            return allCalendarObjects;
         }
 
         internal static void AddTask(CalendarTask newCalendarTask)
